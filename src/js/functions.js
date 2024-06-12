@@ -24,3 +24,57 @@ export function getTypeSearch() {
             return "title=";
     }
 }
+
+
+export function getNumeroElementiPagina() {
+    const select = document.body.querySelector('#limit select');
+    return select ? parseInt(select.value) : 12;
+}
+
+export function getNumeroPagina() {
+    const currentPageElement = document.body.querySelector(".current");
+    return currentPageElement ? parseInt(currentPageElement.textContent) : 1;
+}
+
+export function bindingEventOrderSetting(e) {
+    const parent = e.target.parentElement;
+
+    if (parent.id === "limit") {
+        const selectedValue = e.target.value;
+        // gestisciNumeroElementi(); // Implementa questa funzione se necessaria
+    } else if (parent.id === 'grid') {
+        // Gestisci l'evento del cambio di griglia
+    } else if (parent.id === 'sort') {
+        const sortIcon = parent.children[0];
+        const sortText = parent.children[1];
+
+        if (sortText.textContent === "Asc") {
+            sortIcon.textContent = "arrow_downward";
+            sortText.textContent = "Desc";
+        } else {
+            sortIcon.textContent = "arrow_upward";
+            sortText.textContent = "Asc";
+        }
+        sort = sortText.textContent.toLowerCase();
+    } else if (parent.id === "pagination") {
+        paginationLogicEvent(e.target);
+    }
+
+    callOpenLibraryAPI();
+}
+
+export function paginationLogicEvent(target) {
+    let currentPage = parseInt(target.parentElement.querySelector("span.current").textContent);
+    const spanElementsNodeList = document.body.querySelectorAll('#pagination span:not(.button)');
+
+    if (target.classList.contains("before")) {
+        if (currentPage === 1) return;
+        spanElementsNodeList.forEach(el => {
+            el.textContent = el.textContent === "1" ? "" : parseInt(el.textContent) - 1;
+        });
+    } else if (target.classList.contains("next")) {
+        spanElementsNodeList.forEach(el => {
+            el.textContent = el.textContent === "" ? "1" : parseInt(el.textContent) + 1;
+        });
+    }
+}

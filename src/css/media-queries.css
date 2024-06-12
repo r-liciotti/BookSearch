@@ -1,0 +1,342 @@
+/* 
+Schermi Desktop o Portatili
+@media all and (min-width: 1280px) and (max-width: 1689px) { ... }
+
+/* Tablet in modalità orizzontale */
+/* @media all and (min-width: 737px) and (max-width: 1279px) { ... } */
+
+/* Tablet in modalità verticale */
+/* @media all and (min-width: 481px) and (max-width: 736px) { ... }  */
+@media only screen and (min-width: 1281px) and (max-width: 1689px) {
+
+    #limit:hover,
+    #limit select:hover {
+        background-color: #6f6f6f;
+        color: white;
+    }
+}
+@media only screen and (min-width: 741px) and (max-width: 1280px) {
+    .material-symbols-outlined {font-size: 30px;}
+
+
+    .order-settings .order {
+        width: 90vw;
+        height: 10vh;
+        border-radius: 25px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto auto;
+        justify-content: space-evenly;
+        align-items: center;
+        justify-items: center;
+    }
+
+    .order #grid {
+        width: 17vw;
+    }
+
+    .order #limit {
+        width: 18vw;
+    }
+
+    #limit select {
+        font-size: 25px;
+    }
+
+    .order #pagination {
+        grid-column: span 3;
+        max-width: 500px;
+        width: 55vw;
+        height: 4vh;
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        column-gap: 0px;
+        grid-template-rows: auto auto;
+        align-content: center;
+    }
+
+    #pagination span {
+        width: auto;
+        justify-self: center;
+        margin: 5px;
+    }
+    .order #pagination span:nth-child(3), .order #pagination span:nth-child(5) {
+        font-size: 1.2rem;
+    }
+    .order #pagination .current {
+        width: 7vw;
+        height: 7vw;
+        max-width: 36px;
+        max-height: 36px;
+        font-size: 1.4rem;
+
+    }
+
+    .container-book-list {
+        width: 90%;
+        height: 100%;
+        grid-gap: 20px;
+    }
+
+    .grid-2-columns .book {
+        max-width: 380px;
+        width: 30vw;
+        height: 50vh;
+        margin: 0px;
+        padding: var(--book-padding);
+    }
+    .grid-3-columns .book {
+        width: 26vw;
+        height: 48vh;
+        margin: 0px;
+        padding: var(--book-padding);
+    }
+    .grid-4-columns .book {
+        width: 18vw;
+        height: 40vh;
+        margin: 0px;
+        padding: var(--book-padding);
+    }
+
+    .book .img-container {
+        margin-bottom: 5px;
+    }
+
+    .book .titolo {
+        font-size: 1.8vw;
+    }
+
+    .book .autore {
+        font-size: 1.5vw;
+    }
+
+    .book .descrizione {
+        font-size: 1.4vw;
+    }
+}
+@media only screen and (min-width: 451px) and (max-width: 740px) {
+    :root {
+        --book-parent-border-radius: 12px;
+        --book-padding: 5px;
+        --book-img-container-border-radius: calc(var(--book-parent-border-radius) - var(--book-padding));
+    }
+
+    main .hero {
+        font-size: 15vw;
+
+    }
+
+    main .container-search {
+        width: 75vw;
+
+    }
+
+    .cerca {
+        height: 20px;
+    }
+
+    .cerca .searchIcon__cerca {
+        width: 37px;
+        height: 35px
+    }
+
+    .filtri li {
+        font-size: 17px;
+    }
+
+    .order-settings .order {
+        width: 90vw;
+        height: 9vh;
+        border-radius: 20px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto auto;
+        justify-content: space-evenly;
+        align-items: center;
+        justify-items: center;
+    }
+
+    .order #grid {
+        width: 17vw;
+    }
+
+    .order #limit {
+        width: 18vw;
+    }
+
+    .order #sort {
+        width: 10vw;
+        font-size: 4.4vw;
+    }
+    .order #pagination {
+        grid-column: span 3;
+        width: 65vw;
+        height: 4vh;
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        column-gap: 0px;
+        grid-template-rows: auto auto;
+        align-content: center;
+    }
+
+    #pagination span {
+        width: auto;
+        justify-self: center;
+        margin: 5px;
+    }
+
+    .order #pagination .current {
+        width: 7vw;
+        height: 7vw;
+        max-width: 36px;
+        max-height: 36px;
+        font-size: 1.1rem;
+
+    }
+
+    .container-book-list {
+        width: 90%;
+        height: 100%;
+        grid-gap: 10px;
+    }
+
+    .book {
+        width: 26vw;
+        height: 32vh;
+        margin: 0px;
+        padding: var(--book-padding);
+    }
+    .grid-2-columns .book{
+        width: 37vw;
+        height: 35vh;
+    }
+
+    .book .img-container {
+        margin-bottom: 5px;
+    }
+
+    .book .titolo {
+        font-size: 1.8vw;
+    }
+
+    .book .autore {
+        font-size: 1.5vw;
+    }
+
+    .book .descrizione {
+        font-size: 1.4vw;
+    }
+}
+/* Smartphone o piccoli Tablet */
+@media only screen and (max-width: 450px) {
+    :root {
+        --book-parent-border-radius: 12px;
+        --book-padding: 5px;
+        --book-img-container-border-radius: calc(var(--book-parent-border-radius) - var(--book-padding));
+    }
+
+    main .hero {
+        font-size: 15vw;
+
+    }
+
+    main .container-search {
+        width: 75vw;
+
+    }
+
+    .cerca {
+        height: 20px;
+    }
+
+    .cerca .searchIcon__cerca {
+        width: 37px;
+        height: 35px
+    }
+
+    .filtri li {
+        font-size: 17px;
+    }
+
+    .order-settings .order {
+        width: 90vw;
+        height: 12vh;
+        border-radius: 20px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto auto;
+        justify-content: space-evenly;
+        align-items: center;
+        justify-items: center;
+    }
+
+    .order #grid {
+        width: 17vw;
+    }
+
+    .order #limit {
+        width: 18vw;
+    }
+
+    .order #sort {
+        width: 10vw;
+        font-size: 4.4vw;
+    }
+    .order #pagination {
+        grid-column: span 3;
+        width: 90%;
+        height: 4vh;
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        column-gap: 0px;
+        grid-template-rows: auto auto;
+        justify-content: space-evenly;
+        align-items: center;
+        align-content: center;
+        justify-items: center;
+    }
+
+    #pagination span {
+        width: auto;
+        justify-self: center;
+        margin: 5px;
+    }
+
+    .order #pagination .current {
+        width: 7vw;
+        height: 7vw;
+        font-size: 1.1rem;
+
+    }
+
+    .container-book-list {
+        width: 90%;
+        height: 100%;
+        grid-gap: 0px;
+    }
+
+    .book {
+        width: 22vw;
+        height: 20vh;
+    }
+    .grid-2-columns .book {
+        width: 36vw;
+        height: 28vh;
+    }
+
+    .book .img-container {
+        margin-bottom: 5px;
+    }
+
+    .book .titolo {
+        font-size: 1.8vw;
+    }
+
+    .book .autore {
+        font-size: 1.5vw;
+    }
+
+    .book .descrizione {
+        font-size: 1.4vw;
+    }
+}
