@@ -15,9 +15,15 @@ Schermi Desktop o Portatili
         color: white;
     }
 }
-@media only screen and (min-width: 741px) and (max-width: 1280px) {
-    .material-symbols-outlined {font-size: 30px;}
 
+@media only screen and (min-width: 741px) and (max-width: 1280px) {
+    .material-symbols-outlined {
+        font-size: 30px;
+    }
+
+    main .container-search {
+        width: 75vw;
+    }
 
     .order-settings .order {
         width: 90vw;
@@ -60,9 +66,12 @@ Schermi Desktop o Portatili
         justify-self: center;
         margin: 5px;
     }
-    .order #pagination span:nth-child(3), .order #pagination span:nth-child(5) {
+
+    .order #pagination span:nth-child(3),
+    .order #pagination span:nth-child(5) {
         font-size: 1.2rem;
     }
+
     .order #pagination .current {
         width: 7vw;
         height: 7vw;
@@ -80,17 +89,19 @@ Schermi Desktop o Portatili
 
     .grid-2-columns .book {
         max-width: 380px;
-        width: 30vw;
-        height: 50vh;
+        width: 35vw;
+        height: 45vh;
         margin: 0px;
         padding: var(--book-padding);
     }
+
     .grid-3-columns .book {
-        width: 26vw;
-        height: 48vh;
+        width: 25vw;
+        height: 33vh;
         margin: 0px;
         padding: var(--book-padding);
     }
+
     .grid-4-columns .book {
         width: 18vw;
         height: 40vh;
@@ -102,18 +113,71 @@ Schermi Desktop o Portatili
         margin-bottom: 5px;
     }
 
-    .book .titolo {
+    .grid-3-columns .book .titolo {
         font-size: 1.8vw;
     }
 
-    .book .autore {
-        font-size: 1.5vw;
+    .grid-3-columns .book .autore {
+        font-size: 1.8vw;
     }
 
-    .book .descrizione {
-        font-size: 1.4vw;
+    .grid-3-columns .book .descrizione {
+        font-size: 1.6vw;
+    }
+
+    .grid-2-columns .book .titolo {
+        font-size: 2.4vw;
+    }
+
+    .grid-2-columns .book .autore {
+        font-size: 2.2vw;
+    }
+
+    .grid-2-columns .book .descrizione {
+        font-size: 2.0vw;
+    }
+
+    .book.open {
+        width: 90vw;
+        height: 45vh;
+        max-width: none;
+        grid-template-columns: 2fr 3fr 0fr 0fr;
+        grid-template-rows: 8fr 0fr 1fr;
+    }
+
+    .open .testo {
+        grid-template-rows: 2fr 1fr;
+        gap: 0;
+        margin-left: 5px;
+        padding-top: 5px;
+    }
+
+    .book.open .titolo {
+        font-size: 2.8vw;
+    }
+
+    .book.open .autore {
+        font-size: 2.5vw;
+    }
+
+    .book.open .descrizione {
+        display: block;
+        font-size: 1.8vw;
+        overflow-y: auto;
+        max-height: 20vh;
+    }
+
+    .testo-secondario ul li:nth-child(1) .value {
+        font-size: 0.9rem;
+    }
+
+    .open .close {
+        /* font-size: 2rem;
+        height: 2rem; */
+        margin-right: 0px;
     }
 }
+
 @media only screen and (min-width: 451px) and (max-width: 740px) {
     :root {
         --book-parent-border-radius: 12px;
@@ -168,6 +232,7 @@ Schermi Desktop o Portatili
         width: 10vw;
         font-size: 4.4vw;
     }
+
     .order #pagination {
         grid-column: span 3;
         width: 65vw;
@@ -200,13 +265,14 @@ Schermi Desktop o Portatili
         grid-gap: 10px;
     }
 
-    .book {
+    .grid-3-columns .book {
         width: 26vw;
         height: 32vh;
         margin: 0px;
         padding: var(--book-padding);
     }
-    .grid-2-columns .book{
+
+    .grid-2-columns .book {
         width: 37vw;
         height: 35vh;
     }
@@ -227,6 +293,7 @@ Schermi Desktop o Portatili
         font-size: 1.4vw;
     }
 }
+
 /* Smartphone o piccoli Tablet */
 @media only screen and (max-width: 450px) {
     :root {
@@ -282,6 +349,7 @@ Schermi Desktop o Portatili
         width: 10vw;
         font-size: 4.4vw;
     }
+
     .order #pagination {
         grid-column: span 3;
         width: 90%;
@@ -315,28 +383,91 @@ Schermi Desktop o Portatili
         grid-gap: 0px;
     }
 
-    .book {
+    .grid-3-columns .book {
         width: 22vw;
-        height: 20vh;
+        height: 24vh;
+        padding-bottom: 0;
     }
+
     .grid-2-columns .book {
         width: 36vw;
         height: 28vh;
+    }
+
+    .book.open {
+        width: 90vw;
+        height: 40vh;
+        display: grid;
+        grid-template-columns: 4fr 3fr 0fr 0fr;
+        grid-template-rows: 8fr 0fr 1fr;
+        grid-template-areas:
+            "img testo testo close"
+            "img testo testo ."
+            "img . . wikipedia ";
     }
 
     .book .img-container {
         margin-bottom: 5px;
     }
 
-    .book .titolo {
-        font-size: 1.8vw;
+    .open .testo {
+        grid-template-rows: 2fr 1fr;
+        gap: 0;
+        margin-left: 0;
+        padding-top: 0;
     }
 
-    .book .autore {
-        font-size: 1.5vw;
+    .book .titolo {
+        font-size: 3vw;
+    }
+
+    .grid-3-columns .book .autore {
+        display: none;
+    }
+
+    .grid-2-columns .book .autore {
+        display: block;
+        font-size: 0.8rem;
     }
 
     .book .descrizione {
-        font-size: 1.4vw;
+        display: none;
+    }
+
+    .book.open .titolo {
+        font-size: 3.5vw;
+    }
+
+    .book.open .autore {
+        font-size: 3vw;
+        display: block;
+    }
+
+    .book.open .descrizione {
+        display: block;
+        font-size: 1.9vw;
+        max-height: 20vh;
+    }
+
+    .testo-secondario ul {
+        font-size: 0.6rem;
+    }
+
+    .link-wikipedia {
+        font-size: 0.8rem;
+        min-width: 0;
+        width: 15px;
+        height: 15px;
+        font-weight: bold;
+    }
+
+    .open .close {
+        font-size: 2rem;
+        height: 2rem;
+        margin-right: 0;
+    }
+
+    .testo .value {
+        font-size: 0.5rem;
     }
 }

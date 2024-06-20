@@ -4,7 +4,10 @@
     --book-parent-border-radius: 30px;
     --book-padding: 10px;
     --book-img-container-border-radius: calc(var(--book-parent-border-radius) - var(--book-padding));
+    
+
 }
+
 
 .cactus-classical-serif-regular {
     font-family: "Cactus Classical Serif", serif;
@@ -23,6 +26,7 @@ ul {
 }
 
 .material-symbols-outlined {
+    cursor: pointer;
     font-variation-settings:
         'FILL' 0,
         'wght' 400,
@@ -79,6 +83,7 @@ main .container-search {
 
     display: flex;
     align-items: center;
+    justify-content: space-around;
 
     background-color: white;
     box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.15);
@@ -94,6 +99,7 @@ main .container-search {
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
 .cerca input {
@@ -132,6 +138,7 @@ main .container-search {
     border: 1px solid black;
     border-radius: 20px;
     padding: 5px;
+    cursor: pointer;
 }
 
 
@@ -175,6 +182,7 @@ section {
 
     position: sticky;
     top: 0;
+    z-index: 9;
 
 }
 
@@ -276,7 +284,7 @@ select {
 }
 
 .order #pagination span {
-
+    cursor: pointer;
     text-align: center;
 }
 
@@ -403,6 +411,7 @@ select {
     border: 0px solid red;
     border-radius: var(--book-img-container-border-radius);
     margin-bottom: 10px;
+    filter: grayscale(0.4);
 }
 
 .book .img-container img {
@@ -446,10 +455,13 @@ select {
     box-shadow: inset 0 0 6px 2px #c9c9c9;
 }
 
+
+
 .book.open {
     position: fixed;
     top: 20%;
-    transition: all 1.5s ease-in;
+
+    transition: width 0.8s ease-out;
     max-width: none;
     width: 70vw;
     height: 65vh;
@@ -462,7 +474,10 @@ select {
         "img testo testo ."
         "img wikipedia . .";
     z-index: 99;
+}
 
+.book.open:hover{
+    filter: brightness(1);
 }
 
 .open .img-container {
@@ -494,7 +509,7 @@ select {
 
 }
 
-.testo-secondario .testo-secondario__left {
+.testo-secondario ul {
     margin: 0;
     padding: 0;
 
@@ -505,13 +520,13 @@ select {
     align-items: flex-start;
 }
 
-.testo-secondario__left .label {
+.testo-secondario ul .label {
     font-weight: bold;
     margin: 5px 5px 0px 0;
 }
 
-.testo-secondario__left .label,
-.testo-secondario__left .value {
+.testo-secondario ul .label,
+.testo-secondario ul .value {
     display: inline-block;
 }
 
@@ -525,6 +540,8 @@ select {
 
 .open .descrizione {
     font-size: 2vh;
+    max-height: 260px;
+    overflow: hidden;
 }
 
 
@@ -569,12 +586,11 @@ select {
 
 /* Loader */
 .loader {
-
     width: 48px;
     height: 48px;
     margin: auto;
     position: absolute;
-    top: 70%;
+    top: 80%;
 }
 
 .loader:before {

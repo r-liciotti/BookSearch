@@ -1,13 +1,13 @@
 import axios from 'axios';
-import Book from "./BookClass.js"
-//import * as funzioni from "./functions.js";
+import * as bookComponent from './components/book.js';
+import { createSettingsBar } from './components/settingsBar.js';
+import * as utility from "./components/utility.js";
+import * as api from "./components/api.js";
 
 var screenWidth = window.innerWidth;
+var mobileScreen = screenWidth< 451 ? true : false;
 console.log("screnWidth " + screenWidth);
-const MOBILE_WIDTH = 450;
 
-var searchUrl = "https://openlibrary.org/search.json?";
-const fieldsUrl = "&fields=key,title,author_name,subject,subject_key,cover_i,first_publish_year,availability,number_of_pages_median";
 
 var booksMax = 0;
 var el_forPage = 12;
@@ -33,14 +33,14 @@ const inputElement = document.querySelector('input');
 var bookList = null;
 inputElement.addEventListener('input', (e) => {
     // Aggiorna la variabile con il valore attuale dell'input
-    textSearch = formatTextSearch(e.target.value);
+    textSearch = utility.formatTextSearch(e.target.value);
 });
 
 // Aggiungi un event listener per l'evento 'keypress' o 'keydown'
 inputElement.addEventListener('keydown', function (e) {
     // Verifica se il tasto premuto è il tasto Invio
     if (e.key === 'Enter') {
-        textSearch = formatTextSearch(e.target.value);
+        textSearch = utility.formatTextSearch(e.target.value);
         callOpenLibraryAPI();
     }
 });
@@ -74,271 +74,107 @@ function gestioneActiveClassButton(objListener, e) {
     }
 }
 
-function getTypeSearch() {
-    const content = document.querySelector(".active").childNodes[1].textContent;
-    console.log(content);
-    switch (content) {
-        case "Autore":
-            return "author=";
-        case "Genere":
-            return "subject=";
-        case "Titolo":
-            return "title=";
-    }
-}
 
-function getNumeroElementiPagina() {
-    const select = document.body.querySelector('#limit select');
-    if (select === null) return 12;
-    console.log(document.body.querySelector('#limit select'));
 
-    return parseInt(select.value);
-}
 
-function getNumeroPagina() {
-    console.log(document.body.querySelector("#pagination .current"));
-
-    if (document.body.querySelector(".current") === null) return 1;
-    const N_Page = parseInt(document.body.querySelector(".current").textContent);
-    return N_Page === null ? 1 : N_Page;
-}
 
 
 async function callOpenLibraryAPI(_page = "", _limit = "") {
     if (textSearch === "") return;
-    const url = `${searchUrl}${getTypeSearch()}${textSearch}${fieldsUrl}&limit=${el_forPage}&page=${getNumeroPagina()}&title_sort=${sort}`;
     console.log("Call OpenLibraryAPI");
-    console.log(url);
 
-    try {
-        createLoader();
-        document.body.querySelectorAll('.book').forEach(el => el.remove());
-        // Fare una chiamata GET all'API di esempio
-        const response = await axios.get(url, {
-            validateStatus: () => true,
-        });
+    createLoader();
+    const bookData = await api.getBooksListData(textSearch, utility.getTypeSearch(), el_forPage, utility.getNumeroPagina(), sort);
 
-        booksMax = parseInt(response.data.numFound);
-        bookList = response.data.docs;
-        //console.log(bookList);
-        createSection();
+    document.body.querySelectorAll('.book').forEach(el => el.remove());
 
 
-        bookList = await Promise.all(bookList.map(async el => {
-            const cardElement = await generaCard(el);
-            return {
-                book: el,
-                card: cardElement
-            };
-        }));
-        console.log(bookList);
-        removeLoader();
-        scrollToSectionList();
-
-    } catch (error) {
-        if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.log("error.response");
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-        } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-            // http.ClientRequest in node.js
-            console.log("error.request");
-            console.log(error.request);
-        } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log("error");
-            console.log('Error', error.message);
-        }
-
-    }
-
-}
+    bookList = bookData.docs;
+    booksMax = parseInt(bookData.numFound);
 
 
-function formatTextSearch(text) {
-    return text.toLowerCase().replace(/\s+/g, '_');
-}
+    createSection();
 
-async function generaCard(el) {
     const container = document.querySelector(".container-book-list");
 
-    const book = createElement("div", null, "book", null);
-    book.appendChild(createElement("span", null, "key-book", el.key));
-    const img = document.createElement('img');
-    img.alt = el.title;
-    img.src = await getImageUrl(el.cover_i);
-    const img_contianer = createElement("div", null, "img-container", null);
-    const testoDiv = createElement("div", null, "testo", null)
-    const title = (el.title.length > 30) ? el.title.substring(0, 30) + '...' : el.title;
+    bookList = await Promise.all(bookList.map(async el => {
+        const bookElement = await bookComponent.createBook(el);
+        container.appendChild(bookElement);
 
-    const titolo = createElement("h2", null, "titolo", title);
-    const autore = createElement("h3", null, "autore", el.author_name[0]);
-    const descrizione = createElement("p", null, "descrizione", await fetchDescription(el.key));
-    const testo_principale = createElement("div", null, "testo-principale", null);
-    const testo_secondario = createElement("div", null, "testo-secondario", null);
+        return {
+            bookObj: el,
+            bookElement: bookElement
+        };
+    }));
+    bookList.forEach(el => {
+        el.bookElement.addEventListener("mousedown", e => book_mouseDownEvent(e));
+        el.bookElement.addEventListener("mouseup", e => book_mouseUpEvent(e));
+    });
 
-    img_contianer.appendChild(img);
-    book.appendChild(img_contianer);
-    testo_principale.appendChild(titolo);
-    testo_principale.appendChild(autore);
-    testo_principale.appendChild(descrizione);
-    testoDiv.appendChild(testo_principale);
-    testoDiv.appendChild(testo_secondario);
-
-    const closeSpan = createElement("span", null, "material-symbols-outlined close", "close");
-    book.appendChild(testoDiv);
-    book.appendChild(closeSpan);
-    container.appendChild(book);
-
-    book.addEventListener("mousedown", book_mouseDownEvent);
-    book.addEventListener("mouseup", book_mouseUpEvent);
-//    closeSpan.addEventListener("click", e => book_close(e, bookOld));
-    return book;
+    console.log(bookList);
+    removeLoader();
+    scrollToSectionList();
 }
 
+
+
+
+
 function book_close(e, bookOld) {
-    const book = findParentWithClass(e.target, "book");
+    const book = utility.findParentWithClass(e.target, "book");
 
     closeBook(book, bookOld);
 
 }
 function book_mouseDownEvent(e) {
-    console.log("mouseevebt");
-    console.log(bookList);
-    if ( bookList.some(book => book.card.classList.contains('open'))) {
+    console.log("mouseDownEvent");
+
+    if (e.button !== 0 || isBookAlredyOpen()) {
         return;
     }
-    const book = findParentWithClass(e.target, "book");
-    if (e.button !== 0) { return; }
+
+    const book = utility.findParentWithClass(e.target, "book");
     book.classList.add("click");
 }
 function book_mouseUpEvent(e) {
-    if ( bookList.some(book => book.card.classList.contains('open'))) {
+    console.log("book_mouseUpEvent");
+    if (e.button !== 0 || isBookAlredyOpen()) {
         return;
     }
-    const book = findParentWithClass(e.target, "book");
-     const bookOld = book;
-    // console.log("bookOld");
-    // console.log(bookOld);
-    if (e.button !== 0) { return; }
+
+    const book = utility.findParentWithClass(e.target, "book");
+    const bookObj = bookList.find(el => el.bookElement === book).bookObj;
 
     book.classList.remove("click");
-    if (e.target.classList.contains("close")) {
 
-        closeBook(book , bookOld);        
-
-        book = bookOld;
-        return;
-    }
-
-    openBook(book);
+    openBook(book, bookObj);
 }
 
 
-// Funzione per creare gli elementi html
-function createElement(tag, id, className, content) {
-    const el = document.createElement(tag);
-    if (id !== null) { el.id = id; }
-    if (className !== null) { el.className = className; }
-    if (content !== null) { el.innerHTML = content }
-    return el;
-}
-
-async function fetchDescription(key, fullDesc = false) {
-    try {
-
-        const response = await axios.get(`https://openlibrary.org${key}.json`); // URL della tua API per descrizioni  
-        let desc = (typeof response.data.description === 'object') ? response.data.description.value : response.data.description;
-        if (fullDesc) { return desc; }
-        if (desc.length > 85) {
-            desc = desc.substring(0, 85) + '...';
-        }
-        return desc;
-
-    } catch (error) {
-        console.error(`--Errore nel fetch della descrizione per l'ID ${key}`, error);
-        return 'Descrizione non disponibile'; // Messaggio di fallback
-    }
-}
 
 
-async function getImageUrl(coverId) {
-
-    try {
-        const url = `https://covers.openlibrary.org/b/id/${coverId}-M.jpg?default=false`;
-        const response = await axios.get(url);
-        if (response.status === 200) {
-            return url;
-        }
-    } catch (error) {
-        console.log(error.messae);
-    }
-    return "";
-
-}
 
 function createSection() {
     if (document.querySelector("#books") !== null) return;
     console.log("createSection");
-    const section = createElement("section", "books", null, null);
-    const orderSettingsDiv = createElement("div", null, "order-settings", null);
-    const orderList = createElement("ul", null, "order", null);
 
-    const limitListItem = createElement("li", "limit", null, null);
-    const limitSelect = createElement("select", null, null, null);
-    limitSelect.setAttribute('name', 'limit');
+    const section = utility.createElement("section", "books", null, null);
 
-    // Aggiunta delle opzioni al menu a discesa
-    [8, 12, 16, 20].forEach(value => {
-        const option = createElement("option", null, null, value);
-        option.setAttribute('value', value);
-        limitSelect.appendChild(option);
-    });
+    const orderSettingsDiv = createSettingsBar();
+
+    let limitSelect = orderSettingsDiv.querySelector("select");
     limitSelect.value = 12;
     el_forPage = parseInt(limitSelect.value);
-    limitListItem.appendChild(limitSelect);
-
-    const gridListItem = createElement("li", "grid", null, null);
-
-    if (screenWidth > 1024) {
-        gridListItem.appendChild(createElement("span", null, "material-symbols-outlined active", "table_rows_narrow"));
-        gridListItem.appendChild(createElement("span", null, "material-symbols-outlined", "view_column"));
-    } else { gridListItem.appendChild(createElement("span", null, "material-symbols-outlined active", "view_column")); }
-
-    gridListItem.appendChild(createElement("span", null, "material-symbols-outlined", "view_column_2"));
-
-    const sortListItem = createElement("li", "sort", null, null);
-    const ascSymbol = createElement("span", null, "material-symbols-outlined", "arrow_upward");
-    const ascText = createElement("span", null, null, "Asc");
-    sortListItem.appendChild(ascSymbol);
-    sortListItem.appendChild(ascText);
-
-    const paginationListItem = createElement("li", "pagination", null, null);
-    paginationListItem.appendChild(createElement("span", null, "material-symbols-outlined button first_page", "first_page"));
-    paginationListItem.appendChild(createElement("span", null, "material-symbols-outlined button before", "chevron_left"));
-    paginationListItem.appendChild(createElement("span", null, "before", ""));
-    paginationListItem.appendChild(createElement("span", null, "current", "1"));
-    paginationListItem.appendChild(createElement("span", null, "after", "2"));
-    paginationListItem.appendChild(createElement("span", null, "material-symbols-outlined button after", "chevron_right"));
-    paginationListItem.appendChild(createElement("span", null, "material-symbols-outlined button last_page", "last_page"));
-
-    orderList.appendChild(gridListItem);
-    orderList.appendChild(limitListItem);
-    //orderList.appendChild(sortListItem);
-    orderList.appendChild(paginationListItem);
-
-    orderSettingsDiv.appendChild(orderList);
     section.appendChild(orderSettingsDiv);
 
-    let containerBook = createElement("div", null, "container-book-list grid-3-columns", null);
-    if (screenWidth > 1024) containerBook = createElement("div", null, "container-book-list grid-4-columns", null);
+
+    let containerBook = utility.createElement("div", null, "container-book-list grid-3-columns", null);
+    if (screenWidth > 1024) containerBook = utility.createElement("div", null, "container-book-list grid-4-columns", null);
     section.appendChild(containerBook);
+
+
     document.body.appendChild(section);
+
 
     orderSettingsDiv.addEventListener("click", function (e) {
         bindingEventOrderSetting(e);
@@ -434,40 +270,40 @@ function paginationLogicEvent(target) {
 
 }
 
-async function openBook(book) {
+async function openBook(book, bookObj) {
     console.log("openBook");
+    // const position = book.getBoundingClientRect();
+    // console.log("Top " + position.top);
+    // console.log("left " + position.left);
     bookOld = book.cloneNode(true); // true indica di clonare anche tutti i suoi discendenti
+    console.log(book);
 
-    const bookObj = getOggetto_InBookList(book);
+    //const bookObj = await getOggetto_InBookList(book);
     book.classList.add("open");
-    try{
-    book.querySelector(".descrizione").textContent = await fetchDescription(bookObj.key, true);
-    }catch{
-        console.log("errore bookkey");
-        console.log(bookObj.key);
-    }
-    const linkWiki = createElement("a", "", "link-wikipedia", "Wikipedia");
-    console.log(getOggetto_InBookList(book));
-    // console.log(await getWikipediaApi(book.querySelector(".titolo").textContent));
-    linkWiki.href = await getWikipediaApi(bookObj.title); // Ritorna Url
+    book.querySelector(".descrizione").textContent = await api.fetchDescription(bookObj.key, true);
+
+    const linkWiki = utility.createElement("a", "", "link-wikipedia", "Wikipedia");
+        
+    linkWiki.href = await api.getWikipediaApi(bookObj.title); // Ritorna Url
+    if (mobileScreen) linkWiki.textContent = "W";
     linkWiki.target = "_blank";
     if (linkWiki.href !== "") book.appendChild(linkWiki);
 
-    book.querySelector(".close").addEventListener("click", e => book_close(e, bookOld));
 
-    console.log(createExtraInfoStructure(bookObj));
-    book.querySelector(".testo-secondario").appendChild(createExtraInfoStructure(bookObj));
+    book.querySelector(".testo-secondario").appendChild(bookComponent.createExtraInfoStructure(bookObj));
 
     book.removeEventListener("mousedown", book_mouseDownEvent);
     book.removeEventListener("mouseup", book_mouseUpEvent);
+    book.querySelector(".close").addEventListener("click", e => book_close(e, bookOld));
+
 }
 
 function closeBook(book, bookOld) {
-    
+    console.log("closeBook");
     book.classList.remove("open");
 
     // Riporto book alla sua versione originaria riscrivendolo
-    const propertiesToCopy = ["textContent", "innerHTML", "value", "href"];    
+    const propertiesToCopy = ["textContent", "innerHTML", "value", "href"];
     propertiesToCopy.forEach(property => {
         const value = bookOld[property];
         if (value !== undefined) {
@@ -478,57 +314,14 @@ function closeBook(book, bookOld) {
 
     book.addEventListener("mousedown", book_mouseDownEvent);
     book.addEventListener("mouseup", book_mouseUpEvent);
-  
-   
-}
 
-async function getWikipediaApi(title) {
-    title = title.replace(/ /g, "_");
-    try {
-        const response = await axios.get('https://it.wikipedia.org/w/api.php', {
-            params: {
-                action: 'opensearch',
-                search: title,
-                limit: 1,
-                origin: "*"
-            }
-        });
-        const url = response.data[3];
-        return url;
-
-
-    } catch (error) {
-        console.error('Errore durante il recupero dei dati da Wikipedia:', error);
-        return null;
-    }
 
 }
 
-function createExtraInfoStructure(bookObj) {
-    const divLeft = createElement("ul", null, "testo-secondario__left", null);
-    //const divRight = createElement("div", null, "testo-secondario__right", null);
-    const li1 = createElement("li", null, null, null);
-    li1.appendChild(createElement("div", null, "label", "Categorie: "));
-
-    const categorie = bookObj.subject_key.slice(1, 11).map(s => s.replace(/_/g, ' ')).join(', ');
-    li1.appendChild(createElement("div", null, "value", categorie));
-    divLeft.appendChild(li1);
-
-    const li2 = createElement("li", null, null, null);
-    li2.appendChild(createElement("div", null, "label", "Anno: "));
-    li2.appendChild(createElement("div", null, "value", bookObj.first_publish_year));
-    divLeft.appendChild(li2);
-
-    const li3 = createElement("li", null, null, null);
-    li3.appendChild(createElement("div", null, "label", "Pagine: "));
-    li3.appendChild(createElement("div", null, "value", bookObj.number_of_pages_median));
-    divLeft.appendChild(li3);
-    return divLeft;
-}
 
 function createLoader() {
     console.log("createLoader");
-    document.body.querySelector("main").appendChild(createElement("span", null, "loader", null));
+    document.body.querySelector("main").appendChild(utility.createElement("span", null, "loader", null));
 }
 function removeLoader() {
     console.log("removeLoader");
@@ -537,16 +330,8 @@ function removeLoader() {
 }
 
 
-function findParentWithClass(element, className) {
-    while (element && !element.classList.contains(className)) {
-        element = element.parentNode;
-    }
-    return element;
-}
 
-function getOggetto_InBookList(_card) {
-    //console.log("getOggetto_InBookList");
-    //console.log(_card);
-    const item = bookList.find(item => item.card === _card);
-    return item ? item.book : null;
+
+function isBookAlredyOpen() {
+    return bookList.some(el => el.bookElement.classList.contains("open"));
 }
