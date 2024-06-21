@@ -84,9 +84,8 @@ async function callOpenLibraryAPI(_page = "", _limit = "") {
     console.log("Call OpenLibraryAPI");
 
     createLoader();
-    const bookData = await api.getBooksListData(textSearch, utility.getTypeSearch(), el_forPage, utility.getNumeroPagina(), sort);
 
-    document.body.querySelectorAll('.book').forEach(el => el.remove());
+    const bookData = await api.getBooksListData(textSearch, utility.getTypeSearch(), el_forPage, utility.getNumeroPagina(), sort);  
 
 
     bookList = bookData.docs;
@@ -113,7 +112,6 @@ async function callOpenLibraryAPI(_page = "", _limit = "") {
 
     console.log(bookList);
     removeLoader();
-    scrollToSectionList();
 }
 
 
@@ -182,9 +180,16 @@ function createSection() {
 
 }
 
-function scrollToSectionList() {
+function scrollToSectionList(scrollTo) {
     // Scorrere automaticamente fino alla lista
-    document.getElementById('books').scrollIntoView({ behavior: "smooth", block: "start" });
+    if (scrollTo.includes("#")) {
+
+        document.getElementById(scrollTo.substring(1)).scrollIntoView({ behavior: "smooth", block: "start" });                    
+                 
+    }else{
+        document.getElementsByTagName(scrollTo)[0].scrollIntoView({ behavior: "smooth", block: "start" });                    
+    }
+    
 }
 
 function bindingEventOrderSetting(e) {
@@ -272,13 +277,10 @@ function paginationLogicEvent(target) {
 
 async function openBook(book, bookObj) {
     console.log("openBook");
-    // const position = book.getBoundingClientRect();
-    // console.log("Top " + position.top);
-    // console.log("left " + position.left);
+
     bookOld = book.cloneNode(true); // true indica di clonare anche tutti i suoi discendenti
     console.log(book);
 
-    //const bookObj = await getOggetto_InBookList(book);
     book.classList.add("open");
     book.querySelector(".descrizione").textContent = await api.fetchDescription(bookObj.key, true);
 
@@ -321,12 +323,15 @@ function closeBook(book, bookOld) {
 
 function createLoader() {
     console.log("createLoader");
+    scrollToSectionList("main");
+    document.body.style = "overflow: hidden;";
     document.body.querySelector("main").appendChild(utility.createElement("span", null, "loader", null));
+    document.body.querySelectorAll('.book').forEach(el => el.remove());
 }
 function removeLoader() {
-    console.log("removeLoader");
-
     document.body.querySelector("main .loader").remove();
+    document.body.style = "";
+    scrollToSectionList("#books");
 }
 
 

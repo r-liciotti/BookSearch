@@ -6,7 +6,7 @@ export function createSettingsBar() {
                 div.innerHTML = `
                         <ul class="order">
                                 <li id="grid">
-                                        <span class="material-symbols-outlined active">table_rows_narrow</span>
+                                        <span class="material-symbols-outlined four-columns active">table_rows_narrow</span>
                                         <span class="material-symbols-outlined">view_column</span>
                                         <span class="material-symbols-outlined">view_column_2</span>
                                 </li>

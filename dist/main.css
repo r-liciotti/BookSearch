@@ -235,6 +235,11 @@ select {
     align-items: center;
 }
 
+#grid span.four-columns{
+    transform: rotate(90deg);
+}
+
+
 #grid span {
     display: flex;
     align-items: center;
