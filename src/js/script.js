@@ -5,55 +5,56 @@ import * as utility from "./components/utility.js";
 import * as api from "./components/api.js";
 
 var screenWidth = window.innerWidth;
-var mobileScreen = screenWidth< 451 ? true : false;
+var mobileScreen = screenWidth < 451 ? true : false;
 console.log("screnWidth " + screenWidth);
 
 
-var booksMax = 0;
-var el_forPage = 12;
-var sort = "Asc";
+var booksMax = 0; // Numero di book massimi della ricerca
+var el_forPage = 12; // Elementi per pagina
 
-const containerSearch = document.querySelector(".container-search");
-var textSearch = "";
+const containerSearch = document.querySelector(".container-search"); // Pulsante cerca
 
-var bookOld;
+var textSearch = ""; // Testo da cercare
+var bookList = null; // vettore che conterrà i risultati
 
+var bookOld; // variabile temporanea per salvare il vecchio stato dell'elemento book, utilizzato quandi si apre in dettaglio un libro
+
+const inputElement = document.querySelector('input');  // casella di testo
+
+
+// Logica per ricerca libri
 containerSearch.addEventListener("click", function (e) {
 
     if (e.target.parentElement.className === "filtri") {
-        gestioneActiveClassButton("containerSearch", e);
+        gestioneActiveClassButton("containerSearch", e); // gestione classe active che evidenzia la scelta di tipologia di ricerca
         return;
     } else if (e.target.textContent.trim() === "search") {
-        callOpenLibraryAPI();
+        callOpenLibraryAPI(); // richiama le api
     }
 
 });
 
-const inputElement = document.querySelector('input');
-var bookList = null;
-inputElement.addEventListener('input', (e) => {
+inputElement.addEventListener('input', (e) => { // salvo il testo che viene inserito
     // Aggiorna la variabile con il valore attuale dell'input
     textSearch = utility.formatTextSearch(e.target.value);
 });
 
-// Aggiungi un event listener per l'evento 'keypress' o 'keydown'
+// Aggiungi un event listener per la ricerca quando viene premuto il tasto enter
 inputElement.addEventListener('keydown', function (e) {
     // Verifica se il tasto premuto è il tasto Invio
     if (e.key === 'Enter') {
         textSearch = utility.formatTextSearch(e.target.value);
-        callOpenLibraryAPI();
+        callOpenLibraryAPI(); // richiama le api
     }
 });
 
 
-
+// Gestisce la classe active che evidenzia le scelte selezionate cambiando lo stile dell'elemento relativo
 function gestioneActiveClassButton(objListener, e) {
-    console.log("gestioneActive");
-    console.log(e.target);
     const el = e.target;
     if (objListener === "containerSearch" && (el.tagName === 'LI' || el.tagName === 'SPAN')) {
 
-        const liElement = el.tagName === 'SPAN' ? el.parentNode : el;
+        const liElement = el.tagName === 'SPAN' ? el.parentNode : el; // recupero l'elemento <li> 
 
         if (liElement.classList.contains("active")) {
             liElement.classList.remove("active");
@@ -61,21 +62,12 @@ function gestioneActiveClassButton(objListener, e) {
         }
         containerSearch.querySelectorAll('li').forEach(li => li.classList.remove('active'));
         liElement.classList.add("active");
-    } else if (objListener === "order-settings") {
-        if (el.classList.contains("active")) {
-            //liElement.classList.remove("active");
-            return;
-        }
-        console.clear();
-        console.log(el.parentNode);
-        console.log(el.tagName.toLowerCase());
+    } else if (objListener === "order-settings") { // gestione active della barra dei settings
+        if (el.classList.contains("active")) { return; }
         el.parentNode.querySelectorAll(el.tagName.toLowerCase()).forEach(o => o.classList.remove('active'));
         el.classList.add("active");
     }
 }
-
-
-
 
 
 
@@ -85,7 +77,7 @@ async function callOpenLibraryAPI(_page = "", _limit = "") {
 
     createLoader();
 
-    const bookData = await api.getBooksListData(textSearch, utility.getTypeSearch(), el_forPage, utility.getNumeroPagina(), sort);  
+    const bookData = await api.getBooksListData(textSearch, utility.getTypeSearch(), el_forPage, utility.getNumeroPagina(), "asc");
 
 
     bookList = bookData.docs;
@@ -184,12 +176,12 @@ function scrollToSectionList(scrollTo) {
     // Scorrere automaticamente fino alla lista
     if (scrollTo.includes("#")) {
 
-        document.getElementById(scrollTo.substring(1)).scrollIntoView({ behavior: "smooth", block: "start" });                    
-                 
-    }else{
-        document.getElementsByTagName(scrollTo)[0].scrollIntoView({ behavior: "smooth", block: "start" });                    
+        document.getElementById(scrollTo.substring(1)).scrollIntoView({ behavior: "smooth", block: "start" });
+
+    } else {
+        document.getElementsByTagName(scrollTo)[0].scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    
+
 }
 
 function bindingEventOrderSetting(e) {
@@ -214,18 +206,18 @@ function bindingEventOrderSetting(e) {
 
         return;
     }
-    // Verifica se l'elemento cliccato è un'icona nell'area "#sort"
-    else if (parent.id === 'sort') {
+    // // Verifica se l'elemento cliccato è un'icona nell'area "#sort"
+    // else if (parent.id === 'sort') {
 
-        if (parent.children[1].textContent === "Asc") {
-            parent.children[0].textContent = "arrow_downward";
-            parent.children[1].textContent = "Desc";
-        } else {
-            parent.children[0].textContent = "arrow_upward";
-            parent.children[1].textContent = "Asc";
-        }
-        sort = parent.children[1].textContent.toLowerCase();
-    } else if (parent.id === "pagination") {
+    //     if (parent.children[1].textContent === "Asc") {
+    //         parent.children[0].textContent = "arrow_downward";
+    //         parent.children[1].textContent = "Desc";
+    //     } else {
+    //         parent.children[0].textContent = "arrow_upward";
+    //         parent.children[1].textContent = "Asc";
+    //     }
+    //     sort = parent.children[1].textContent.toLowerCase();
+    else if (parent.id === "pagination") {
 
         paginationLogicEvent(e.target);
     } else {
@@ -285,7 +277,7 @@ async function openBook(book, bookObj) {
     book.querySelector(".descrizione").textContent = await api.fetchDescription(bookObj.key, true);
 
     const linkWiki = utility.createElement("a", "", "link-wikipedia", "Wikipedia");
-        
+
     linkWiki.href = await api.getWikipediaApi(bookObj.title); // Ritorna Url
     if (mobileScreen) linkWiki.textContent = "W";
     linkWiki.target = "_blank";
