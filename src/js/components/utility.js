@@ -1,3 +1,4 @@
+// Trova il genitore con una classe specifica
 export function findParentWithClass(element, className) {
     while (element && !element.classList.contains(className)) {
         element = element.parentNode;
@@ -5,6 +6,7 @@ export function findParentWithClass(element, className) {
     return element;
 }
 
+// Funzione per ottenere l'oggetto book in booklist
 export function getOggetto_InBookList(_bookElement) {
     //console.log("getOggetto_InBookList");
     //console.log(_card);

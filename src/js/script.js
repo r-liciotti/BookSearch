@@ -70,80 +70,87 @@ function gestioneActiveClassButton(objListener, e) {
 }
 
 
-
+// Chiamata alle api OpenLibrary
 async function callOpenLibraryAPI(_page = "", _limit = "") {
     if (textSearch === "") return;
     console.log("Call OpenLibraryAPI");
 
-    createLoader();
+    createLoader(); // Creo il loader
 
+    // Chiamo api ed ottengo i dati
     const bookData = await api.getBooksListData(textSearch, utility.getTypeSearch(), el_forPage, utility.getNumeroPagina(), "asc");
 
-
+    // creo la listas di libri
     bookList = bookData.docs;
+    // ottengo quanti libri ci sono
     booksMax = parseInt(bookData.numFound);
 
-
+    // creo la sezione dove ci saranno libri
     createSection();
 
     const container = document.querySelector(".container-book-list");
 
+    // sovrascrivo booklist per otttnere un array [obj, divElement] 
     bookList = await Promise.all(bookList.map(async el => {
-        const bookElement = await bookComponent.createBook(el);
-        container.appendChild(bookElement);
+        const bookElement = await bookComponent.createBook(el); // creo la l'elemento libro
+        container.appendChild(bookElement);// append dell'elemento 
 
         return {
             bookObj: el,
             bookElement: bookElement
         };
     }));
+    //  assegno eventi di apertura ai libri
     bookList.forEach(el => {
         el.bookElement.addEventListener("mousedown", e => book_mouseDownEvent(e));
         el.bookElement.addEventListener("mouseup", e => book_mouseUpEvent(e));
     });
 
     console.log(bookList);
-    removeLoader();
+    removeLoader(); // rimuovo il loader
 }
 
 
 
 
-
+// Funzione per la chisura del libro
 function book_close(e, bookOld) {
+    // ottengo il div.book
     const book = utility.findParentWithClass(e.target, "book");
 
+    // chiudo il libro
     closeBook(book, bookOld);
 
 }
+// evento per aperutura libro
 function book_mouseDownEvent(e) {
-    console.log("mouseDownEvent");
-
     if (e.button !== 0 || isBookAlredyOpen()) {
         return;
     }
 
+    // mi assicuro di prendere l'elemento padre per assegnare la classe click
     const book = utility.findParentWithClass(e.target, "book");
     book.classList.add("click");
 }
 function book_mouseUpEvent(e) {
-    console.log("book_mouseUpEvent");
     if (e.button !== 0 || isBookAlredyOpen()) {
         return;
     }
-
+    // mi assicuro di prendere l'elemento padre
     const book = utility.findParentWithClass(e.target, "book");
+    // dall'elemento div ottengo l'oggetto da booklist
     const bookObj = bookList.find(el => el.bookElement === book).bookObj;
 
     book.classList.remove("click");
 
+    // apro libro
     openBook(book, bookObj);
 }
 
 
 
 
-
+// Creo sezione e barra di controllo 
 function createSection() {
     if (document.querySelector("#books") !== null) return;
     console.log("createSection");
@@ -172,6 +179,8 @@ function createSection() {
 
 }
 
+
+// Funzione per effettuare lo scroll
 function scrollToSectionList(scrollTo) {
     // Scorrere automaticamente fino alla lista
     if (scrollTo.includes("#")) {
@@ -184,6 +193,7 @@ function scrollToSectionList(scrollTo) {
 
 }
 
+// Funzione per il binding degli eventi con gli elementi della barra di controllo
 function bindingEventOrderSetting(e) {
     const parent = e.target.parentElement;
 
@@ -206,17 +216,6 @@ function bindingEventOrderSetting(e) {
 
         return;
     }
-    // // Verifica se l'elemento cliccato è un'icona nell'area "#sort"
-    // else if (parent.id === 'sort') {
-
-    //     if (parent.children[1].textContent === "Asc") {
-    //         parent.children[0].textContent = "arrow_downward";
-    //         parent.children[1].textContent = "Desc";
-    //     } else {
-    //         parent.children[0].textContent = "arrow_upward";
-    //         parent.children[1].textContent = "Asc";
-    //     }
-    //     sort = parent.children[1].textContent.toLowerCase();
     else if (parent.id === "pagination") {
 
         paginationLogicEvent(e.target);
@@ -224,26 +223,27 @@ function bindingEventOrderSetting(e) {
         return;
     }
 
-    callOpenLibraryAPI();
+    callOpenLibraryAPI(); // richiamo le api se l'utente cambia dei settaggi
 }
 
+// Logica per la paginazione 
 function paginationLogicEvent(target) {
     let currentPage = parseInt(target.parentElement.querySelector("span.current").textContent);
     var spanElementsNodeList = document.body.querySelectorAll('#pagination span:not(.material-symbols-outlined)');
 
-    if (target.classList.contains("before")) {
+    if (target.classList.contains("before")) { //pagina antecedente
         if (currentPage === 1) return;
         spanElementsNodeList.forEach(el => {
             el.textContent = el.textContent === "1" ? "" : parseInt(el.textContent) - 1;
         });
     }
-    if (target.classList.contains("after")) {
+    if (target.classList.contains("after")) { // pagina successiva
         spanElementsNodeList.forEach(el => {
             console.log(el.textContent);
             el.textContent = el.textContent === "" ? "1" : parseInt(el.textContent) + 1;
         });
     }
-    if (target.classList.contains("first_page")) {
+    if (target.classList.contains("first_page")) { // va alla pagina 1
         spanElementsNodeList.forEach(el => {
             el.style.fontSize = "";
         });
@@ -251,7 +251,7 @@ function paginationLogicEvent(target) {
         spanElementsNodeList[1].textContent = "1";
         spanElementsNodeList[2].textContent = "2";
     }
-    if (target.classList.contains("last_page")) {
+    if (target.classList.contains("last_page")) { // ultima pagina
         let pageMax = booksMax / el_forPage | 0;
 
         if (pageMax.toString().length > 2) {
@@ -267,36 +267,43 @@ function paginationLogicEvent(target) {
 
 }
 
+// Funzione apertura libro, aggiunge informazioni secondarie
 async function openBook(book, bookObj) {
     console.log("openBook");
 
+    // salvo una versione di backup del libro,  prima di aggiungere elementi
     bookOld = book.cloneNode(true); // true indica di clonare anche tutti i suoi discendenti
     console.log(book);
 
     book.classList.add("open");
+    // ottengo la descrizione piu lunga
     book.querySelector(".descrizione").textContent = await api.fetchDescription(bookObj.key, true);
-
+    // creo elemento link per wikipedia
     const linkWiki = utility.createElement("a", "", "link-wikipedia", "Wikipedia");
-
+    // ottengo l'indirizzo specifico del libro a wikipedia
     linkWiki.href = await api.getWikipediaApi(bookObj.title); // Ritorna Url
+    // Se dimensioni schermo piccole visualizzo solo il testo "W" altrimenti "Wikipedia"
     if (mobileScreen) linkWiki.textContent = "W";
     linkWiki.target = "_blank";
     if (linkWiki.href !== "") book.appendChild(linkWiki);
 
-
+    // Agggiungo informazioni secondarie relative al libro
     book.querySelector(".testo-secondario").appendChild(bookComponent.createExtraInfoStructure(bookObj));
 
+    // Rimuovo eventi inerenti all'apertura libro, perche gia apaerto
     book.removeEventListener("mousedown", book_mouseDownEvent);
     book.removeEventListener("mouseup", book_mouseUpEvent);
-    book.querySelector(".close").addEventListener("click", e => book_close(e, bookOld));
 
+    // aggiungo evento per chiusuras
+    book.querySelector(".close").addEventListener("click", e => book_close(e, bookOld));
 }
 
+// Logica per chiusura libro
 function closeBook(book, bookOld) {
-    console.log("closeBook");
+    // Rimuovo classe open    
     book.classList.remove("open");
 
-    // Riporto book alla sua versione originaria riscrivendolo
+    // Riporto book alla sua versione originaria riscrivendolo utilizzando bookOld la versione di backup
     const propertiesToCopy = ["textContent", "innerHTML", "value", "href"];
     propertiesToCopy.forEach(property => {
         const value = bookOld[property];
@@ -305,11 +312,9 @@ function closeBook(book, bookOld) {
         }
     });
 
-
+    // aggiungo eventi inerenti all'apertura del libro
     book.addEventListener("mousedown", book_mouseDownEvent);
     book.addEventListener("mouseup", book_mouseUpEvent);
-
-
 }
 
 
@@ -328,7 +333,7 @@ function removeLoader() {
 
 
 
-
+// controllo se ci sono libri aperti
 function isBookAlredyOpen() {
     return bookList.some(el => el.bookElement.classList.contains("open"));
 }
