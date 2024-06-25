@@ -70,9 +70,7 @@ Contributi, segnalazioni di bug e richieste di funzionalità sono benvenuti! Per
 4. Fai il push al branch (git push origin feature/AmazingFeature)
 5. Apri una Pull Request
 
-## Licenza
 
-Distribuito sotto la licenza MIT. Vedi `LICENSE` per maggiori informazioni.
 
 ## Contatti
 
