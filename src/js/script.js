@@ -78,12 +78,19 @@ async function callOpenLibraryAPI(_page = "", _limit = "") {
     createLoader(); // Creo il loader
 
     // Chiamo api ed ottengo i dati
-    const bookData = await api.getBooksListData(textSearch, utility.getTypeSearch(), el_forPage, utility.getNumeroPagina(), "asc");
-
-    // creo la listas di libri
-    bookList = bookData.docs;
-    // ottengo quanti libri ci sono
-    booksMax = parseInt(bookData.numFound);
+    try {
+        const bookData = await api.getBooksListData(textSearch, utility.getTypeSearch(), el_forPage, utility.getNumeroPagina(), "asc");
+   
+        // creo la listas di libri
+        bookList = bookData.docs;
+        // ottengo quanti libri ci sono
+        booksMax = parseInt(bookData.numFound);
+    } catch (error) {
+        console.error("Errore durante il recupero dei dati:", error);
+        // Gestisco l'errore impostando bookList come un array vuoto
+        bookList = [];
+    }
+   
 
     // creo la sezione dove ci saranno libri
     createSection();

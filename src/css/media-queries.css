@@ -15,8 +15,7 @@ Schermi Desktop o Portatili
         color: white;
     }
 }
-
-@media only screen and (min-width: 741px) and (max-width: 1280px) {
+@media only screen and (min-width: 1024px) and (max-width: 1280px) {
     .material-symbols-outlined {
         font-size: 30px;
     }
@@ -45,8 +44,18 @@ Schermi Desktop o Portatili
         width: 18vw;
     }
 
+    #grid span{
+        font-size: clamp(40px, 3rem, 45px);
+        width: 55px;
+        height: 55px;
+        border-radius: 20px;
+    }
+
     #limit select {
-        font-size: 25px;
+        font-size: 30px;
+    }
+    select option{
+        font-size: 20px;
     }
 
     .order #pagination {
@@ -62,6 +71,7 @@ Schermi Desktop o Portatili
     }
 
     #pagination span {
+        font-size: 40px;
         width: auto;
         justify-self: center;
         margin: 5px;
@@ -69,15 +79,188 @@ Schermi Desktop o Portatili
 
     .order #pagination span:nth-child(3),
     .order #pagination span:nth-child(5) {
-        font-size: 1.2rem;
+        font-size: 1.8rem;
     }
 
     .order #pagination .current {
-        width: 7vw;
-        height: 7vw;
-        max-width: 36px;
-        max-height: 36px;
-        font-size: 1.4rem;
+        width: 5.5vw;
+        height: 5.5vw;
+        max-width: 50px;
+        max-height: 50px;
+        font-size: 1.8rem;
+
+    }
+
+    .container-book-list {
+        width: 90%;
+        height: 100%;
+        grid-gap: 20px;
+    }
+
+    .grid-2-columns .book {
+        max-width: 380px;
+        width: 35vw;
+        height: 45vh;
+        margin: 0px;
+        padding: var(--book-padding);
+    }
+
+    .grid-3-columns .book {
+        width: 25vw;
+        height: 33vh;
+        margin: 0px;
+        padding: var(--book-padding);
+    }
+
+    .grid-4-columns .book {
+        width: 18vw;
+        height: 40vh;
+        margin: 0px;
+        padding: var(--book-padding);
+    }
+
+    .book .img-container {
+        margin-bottom: 5px;
+    }
+
+    .grid-3-columns .book .titolo {
+        font-size: 1.8vw;
+    }
+
+    .grid-3-columns .book .autore {
+        font-size: 1.8vw;
+    }
+
+    .grid-3-columns .book .descrizione {
+        font-size: 1.6vw;
+    }
+
+    .grid-2-columns .book .titolo {
+        font-size: 2.4vw;
+    }
+
+    .grid-2-columns .book .autore {
+        font-size: 2.2vw;
+    }
+
+    .grid-2-columns .book .descrizione {
+        font-size: 2.0vw;
+    }
+
+    .book.open {
+        width: 90vw;
+        height: 45vh;
+        max-width: none;
+        grid-template-columns: 2fr 3fr 0fr 0fr;
+        grid-template-rows: 8fr 0fr 1fr;
+    }
+
+    .open .testo {
+        grid-template-rows: 2fr 1fr;
+        gap: 0;
+        margin-left: 5px;
+        padding-top: 5px;
+    }
+
+    .book.open .titolo {
+        font-size: 2.8vw;
+    }
+
+    .book.open .autore {
+        font-size: 2.5vw;
+    }
+
+    .book.open .descrizione {
+        display: block;
+        font-size: 1.8vw;
+        overflow-y: auto;
+        max-height: 20vh;
+    }
+
+    .testo-secondario ul li:nth-child(1) .value {
+        font-size: 0.9rem;
+    }
+
+    .open .close {
+        /* font-size: 2rem;
+        height: 2rem; */
+        margin-right: 0px;
+    }
+}
+
+@media only screen and (min-width: 741px) and (max-width: 1023px) {
+    .material-symbols-outlined {
+        font-size: 30px;
+    }
+
+    main .container-search {
+        width: 75vw;
+    }
+
+    .order-settings .order {
+        width: 90vw;
+        height: 10vh;
+        border-radius: 25px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto auto;
+        justify-content: space-evenly;
+        align-items: center;
+        justify-items: center;
+    }
+
+    .order #grid {
+        width: 17vw;
+    }
+
+    .order #limit {
+        width: 18vw;
+    }
+
+    #grid span{
+        font-size: clamp(30px, 2.5rem, 40px);
+        width: 50px;
+        height: 50px;
+        border-radius: 20px;
+    }
+
+    #limit select {
+        font-size: 30px;
+    }
+    select option{
+        font-size: 20px;
+    }
+
+    .order #pagination {
+        grid-column: span 3;
+        max-width: 500px;
+        width: 55vw;
+        height: 4vh;
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        column-gap: 0px;
+        grid-template-rows: auto auto;
+        align-content: center;
+    }
+
+    #pagination span {
+        font-size: 40px;
+        width: auto;
+        justify-self: center;
+        margin: 5px;
+    }
+
+    .order #pagination span:nth-child(3),
+    .order #pagination span:nth-child(5) {
+        font-size: 1.8rem;
+    }
+
+    .order #pagination .current {
+        width: 5.5vw;
+        height: 5.5vw;
+        max-width: 50px;
+        max-height: 50px;
+        font-size: 1.8rem;
 
     }
 
