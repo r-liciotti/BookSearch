@@ -15,6 +15,7 @@ Schermi Desktop o Portatili
         color: white;
     }
 }
+
 @media only screen and (min-width: 1024px) and (max-width: 1280px) {
     .material-symbols-outlined {
         font-size: 30px;
@@ -24,9 +25,9 @@ Schermi Desktop o Portatili
         width: 75vw;
     }
 
-    .order-settings .order {
+    .order-settings .order {        
         width: 90vw;
-        height: 10vh;
+        height: 7vh;
         border-radius: 25px;
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -37,24 +38,25 @@ Schermi Desktop o Portatili
     }
 
     .order #grid {
-        width: 17vw;
+        width: 17vw;        
     }
 
     .order #limit {
         width: 18vw;
     }
 
-    #grid span{
-        font-size: clamp(40px, 3rem, 45px);
-        width: 55px;
-        height: 55px;
+    #grid span {
+        font-size: clamp(30px, 3rem, 35px);
+        width: 45px;
+        height: 45px;
         border-radius: 20px;
     }
 
     #limit select {
-        font-size: 30px;
+        font-size: clamp(25px, 2rem, 30px);
     }
-    select option{
+
+    select option {
         font-size: 20px;
     }
 
@@ -71,7 +73,7 @@ Schermi Desktop o Portatili
     }
 
     #pagination span {
-        font-size: 40px;
+        font-size: 35px;
         width: auto;
         justify-self: center;
         margin: 5px;
@@ -79,15 +81,15 @@ Schermi Desktop o Portatili
 
     .order #pagination span:nth-child(3),
     .order #pagination span:nth-child(5) {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
     }
 
     .order #pagination .current {
         width: 5.5vw;
         height: 5.5vw;
-        max-width: 50px;
-        max-height: 50px;
-        font-size: 1.8rem;
+        max-width: 45px;
+        max-height: 45px;
+        font-size: 1.6rem;
 
     }
 
@@ -148,6 +150,7 @@ Schermi Desktop o Portatili
     }
 
     .book.open {
+        top: 12%;
         width: 90vw;
         height: 45vh;
         max-width: none;
@@ -163,18 +166,19 @@ Schermi Desktop o Portatili
     }
 
     .book.open .titolo {
-        font-size: 2.8vw;
+        font-size: 2.3vw;
     }
 
     .book.open .autore {
-        font-size: 2.5vw;
+        font-size: 2.0vw;
     }
 
     .book.open .descrizione {
         display: block;
-        font-size: 1.8vw;
+        font-size: 1.3vw;
         overflow-y: auto;
-        max-height: 20vh;
+        max-height: 21vh;
+        
     }
 
     .testo-secondario ul li:nth-child(1) .value {
@@ -185,6 +189,87 @@ Schermi Desktop o Portatili
         /* font-size: 2rem;
         height: 2rem; */
         margin-right: 0px;
+    }
+
+    .link-wikipedia:hover {
+        background-color: initial;
+        color: initial;
+    }
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1280px) and (orientation: landscape) {
+
+    .order-settings .order {
+        height: 13vh;
+    }
+
+    #grid span {
+        font-size: clamp(30px, 3rem, 35px);
+        width: 50px;
+        height: 50px;
+    }
+
+    .order #pagination .current {
+        font-size: 1.7rem;
+        max-width: 40px;
+        max-height: 40px;
+    }
+
+    .order #pagination span:nth-child(3),
+    .order #pagination span:nth-child(5) {
+        font-size: 1.6rem;
+    }
+
+
+    .grid-3-columns .book {
+        width: 25vw;
+        height: 40vh;
+    }
+
+    .grid-3-columns .book .titolo {
+        font-size: 1.7vw;
+    }
+    .grid-3-columns .book .autore {
+        font-size: 1.6vw;
+    }
+
+    .grid-2-columns .book {
+        width: 30vw;
+        height: 45vh;
+    }
+
+    .grid-2-columns .book .titolo {
+        font-size: 1.9vw;
+    }
+    .grid-2-columns .book .autore {
+        font-size: 1.8vw;
+    }
+    .book .descrizione{
+        display: none;
+    }
+
+    .book.open {
+        width: 90vw;
+        height: 73vh;
+    }
+
+    .book.open .titolo {
+        font-size: 2.5vw;
+    }
+
+    .book.open .autore {
+        font-size: 2.2vw;
+    }
+
+    .book.open .descrizione {
+        font-size: 1.4vw;
+        max-height: 33vh;
+        margin-bottom: 25px;
+    }
+
+    .link-wikipedia:hover {
+        background-color: initial;
+        color: initial;
     }
 }
 
@@ -217,7 +302,7 @@ Schermi Desktop o Portatili
         width: 18vw;
     }
 
-    #grid span{
+    #grid span {
         font-size: clamp(30px, 2.5rem, 40px);
         width: 50px;
         height: 50px;
@@ -227,7 +312,8 @@ Schermi Desktop o Portatili
     #limit select {
         font-size: 30px;
     }
-    select option{
+
+    select option {
         font-size: 20px;
     }
 
@@ -321,8 +407,9 @@ Schermi Desktop o Portatili
     }
 
     .book.open {
+        top: 15%;
         width: 90vw;
-        height: 45vh;
+        height: 50vh;
         max-width: none;
         grid-template-columns: 2fr 3fr 0fr 0fr;
         grid-template-rows: 8fr 0fr 1fr;
@@ -347,7 +434,8 @@ Schermi Desktop o Portatili
         display: block;
         font-size: 1.8vw;
         overflow-y: auto;
-        max-height: 20vh;
+        max-height: 20vh; 
+        width: 80%;
     }
 
     .testo-secondario ul li:nth-child(1) .value {
@@ -359,7 +447,98 @@ Schermi Desktop o Portatili
         height: 2rem; */
         margin-right: 0px;
     }
+
+    .link-wikipedia:hover {
+        background-color: initial;
+        color: initial;
+    }
 }
+
+@media only screen and (min-width: 741px) and (max-width: 1023px) and (orientation: landscape) {
+    .order-settings .order {
+        display: grid;
+        align-content: space-evenly;
+    }
+
+    .order-settings .order {
+        height: 25vh;
+        padding-top: 0px;
+        padding-bottom: 5px;
+    }
+
+    #grid span {
+        font-size: clamp(25px, 2.5rem, 30px);
+        width: 40px;
+        height: 40px;
+        border-radius: 15px;
+    }
+
+    #limit select {
+        font-size: 22px;
+    }
+
+    #pagination{
+        margin-top: 5px;
+    }
+
+    #pagination span {
+        font-size: 1.8rem;
+        width: auto;
+        justify-self: center;
+        margin: 5px;
+    }
+
+    .order #pagination .current {
+        width: 5.5vw;
+        height: 5.5vw;
+        max-width: 40px;
+        max-height: 40px;
+        font-size: 1.5rem;
+    }
+
+    .order #pagination span:nth-child(3),
+    .order #pagination span:nth-child(5) {
+        font-size: 1.4rem;
+    }
+
+    .grid-3-columns .book {
+        width: 23vw;
+        height: 63vh;
+    }
+    .grid-2-columns .book {
+        width: 28vw;
+        height: 66vh;
+    }
+    .book .descrizione {
+       display: none;
+    }
+
+    .book.open {
+        top: 10%;
+        width: 90vw;
+        height: 80vh;
+        max-width: 100%;
+        display: grid;
+        grid-template-columns: 2fr 3fr 0fr 0fr;
+        grid-template-rows: 8fr 0fr 1fr;
+        grid-template-areas:
+        "img testo testo close"
+        "img testo testo ."
+        "img . . wikipedia ";
+    }
+
+    .book.open .descrizione {
+        display: block;
+        font-size: 1.6vw;
+        overflow-y: overlay;
+        max-height: 20vh;
+    }
+    .testo-secondario ul li:nth-child(1) .value {
+        font-size: 0.8rem;
+    }
+
+}
+
 
 @media only screen and (min-width: 451px) and (max-width: 740px) {
     :root {
@@ -475,6 +654,96 @@ Schermi Desktop o Portatili
     .book .descrizione {
         font-size: 1.4vw;
     }
+
+    .link-wikipedia:hover {
+        background-color: initial;
+        color: initial;
+    }
+}
+@media only screen and (min-width: 451px) and (max-width: 740px) and (orientation: landscape){
+    :root {
+        --book-parent-border-radius: 12px;
+        --book-padding: 5px;
+        --book-img-container-border-radius: calc(var(--book-parent-border-radius) - var(--book-padding));
+    }
+
+    .order-settings .order {
+        width: 90vw;
+        height: 21vh;
+        border-radius: 20px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto auto;
+        justify-content: space-evenly;
+        align-items: center;
+        justify-items: center;
+    }
+
+    .order #pagination {      
+        height: 9vh;      
+    }
+
+    .grid-3-columns .book {
+        width: 25vw;
+        height: 50vh;
+    }
+    .grid-2-columns .book {
+        width: 35vw;
+        height: 60vh;
+    }
+
+    .book .descrizione {
+       display: none;
+    }
+
+    .book.open {
+        position: fixed;
+        top: 10%;
+        transition: width 0.8s ease-out;
+        max-width: none;
+        width: 90vw;
+        height: 80vh;
+        display: grid;
+        grid-template-columns: 3fr 3fr 3fr 1fr;
+        grid-template-rows: 1fr 5fr 1fr;
+        gap: 0px 0px;
+        grid-template-areas:
+            "img testo testo close"
+            "img testo testo ."
+            "img  . . wikipedia";
+        z-index: 99;
+    }
+
+    .book.open .descrizione {
+        display: block;
+        font-size: 1.4vw;
+        overflow-y: scroll;
+        max-height: 35vh;
+    }
+
+    .open .titolo {        
+        font-size: 1.1rem;
+    }
+    
+    .open .autore {
+        font-size: 0.9rem;
+    }
+
+    .testo-secondario ul .label,.testo-secondario ul .value {
+        font-size: 0.7rem;
+    }
+
+    .link-wikipedia {
+        font-size: 0.8rem;
+        min-width: 0;
+        width: 15px;
+        height: 15px;
+        font-weight: bold;
+    }
+    .link-wikipedia:hover {
+        background-color: initial;
+        color: initial;
+    }
 }
 
 /* Smartphone o piccoli Tablet */
@@ -567,8 +836,9 @@ Schermi Desktop o Portatili
     }
 
     .grid-3-columns .book {
-        width: 22vw;
-        height: 24vh;
+        width: 23vw;
+        height: 30vh;
+        max-height: 210px;
         padding-bottom: 0;
     }
 
@@ -577,11 +847,15 @@ Schermi Desktop o Portatili
         height: 28vh;
     }
 
+    .book .titolo {
+        font-size: 2.7vw;
+    }
+
     .book.open {
         width: 90vw;
         height: 40vh;
         display: grid;
-        grid-template-columns: 4fr 3fr 0fr 0fr;
+        grid-template-columns: 3fr 3fr 0fr 0fr;
         grid-template-rows: 8fr 0fr 1fr;
         grid-template-areas:
             "img testo testo close"
@@ -600,9 +874,7 @@ Schermi Desktop o Portatili
         padding-top: 0;
     }
 
-    .book .titolo {
-        font-size: 3vw;
-    }
+  
 
     .grid-3-columns .book .autore {
         display: none;
@@ -629,7 +901,8 @@ Schermi Desktop o Portatili
     .book.open .descrizione {
         display: block;
         font-size: 1.9vw;
-        max-height: 20vh;
+        max-height: 15vh;
+        overflow-y: auto;
     }
 
     .testo-secondario ul {
@@ -652,5 +925,10 @@ Schermi Desktop o Portatili
 
     .testo .value {
         font-size: 0.5rem;
+    }
+
+    .link-wikipedia:hover {
+        background-color: initial;
+        color: initial;
     }
 }

@@ -7,8 +7,8 @@ export async function createBook(book) {
   const desc = await api.fetchDescription(book.key);
   let title = book.title;
   if(title.length  > 37) {title = title.substring(0, 34).trimEnd()  + "...";}
-  if(window.innerWidth < 450 && title.length  > 23) {title = title.substring(0,17).trimEnd()  + "...";}
-  if(window.innerWidth < 769 && title.length  > 26) {title = title.substring(0,20).trimEnd()  + "...";}
+  // if(window.innerWidth < 450 && title.length  > 23) {title = title.substring(0,17).trimEnd()  + "...";}
+  //if(window.innerWidth < 769 && title.length  > 26) {title = title.substring(0,20).trimEnd()  + "...";}
   
 
   const div = document.createElement('div');
@@ -33,7 +33,6 @@ export async function createBook(book) {
 
 export function createExtraInfoStructure(bookObj) {
   const divLeft = utility.createElement("ul", null, null, null);
-  //const divRight = utility.createElement("div", null, "testo-secondario__right", null);
   const li1 = utility.createElement("li", null, null, null);
   li1.appendChild(utility.createElement("div", null, "label", "Categorie: "));
 

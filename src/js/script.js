@@ -8,6 +8,8 @@ var screenWidth = window.innerWidth;
 var mobileScreen = screenWidth < 451 ? true : false;
 console.log("screnWidth " + screenWidth);
 
+// Controllo il disposivo sia touch o con mouse
+const clickOrTouch = utility.isTouchDevice() === true ? 'touchstart' : 'click';
 
 var booksMax = 0; // Numero di book massimi della ricerca
 var el_forPage = 12; // Elementi per pagina
@@ -23,7 +25,7 @@ const inputElement = document.querySelector('input');  // casella di testo
 
 
 // Logica per ricerca libri
-containerSearch.addEventListener("click", function (e) {
+containerSearch.addEventListener(clickOrTouch, function (e) {
 
     if (e.target.parentElement.className === "filtri") {
         gestioneActiveClassButton("containerSearch", e); // gestione classe active che evidenzia la scelta di tipologia di ricerca
@@ -47,6 +49,41 @@ inputElement.addEventListener('keydown', function (e) {
         callOpenLibraryAPI(); // richiama le api
     }
 });
+
+// Gestisco l'icone della griglia a 4 colonne. Se i dispositivi sotto a 1024px di width nascondo l'opzione altrimenti la visualizzo
+window.addEventListener('resize', function (e) {
+    screenWidth = window.innerWidth;
+
+    const orderSettingsDiv = document.querySelector(".order-settings");
+    if (orderSettingsDiv) {
+        const grid_4columns_icon = orderSettingsDiv.querySelector(".four-columns");
+        const grid_3columns_icon = orderSettingsDiv.querySelector(".three-columns");
+
+        if (grid_4columns_icon && screenWidth <= 1024) {
+            if (grid_4columns_icon.classList.contains("active")) {
+
+                grid_4columns_icon.classList.remove("active");
+                grid_3columns_icon.classList.add("active");
+
+                // Aggiorno il container della lista libri con la griglia a 3 colonne
+                const bookListContainer = document.querySelector(".container-book-list");
+                bookListContainer.classList.remove("grid-4-columns");
+                bookListContainer.classList.add("grid-3-columns");
+            }
+            grid_4columns_icon.style.display = "none";
+        } else {
+            grid_4columns_icon.style.display = "flex";
+        }
+    }
+    const linkWiki = document.querySelector(".link-wikipedia");
+    if (linkWiki) {
+        linkWiki.textContent = "Wikipedia";
+        if (screenWidth < 451) document.querySelector(".link-wikipedia").textContent = "W";  
+    } 
+
+});
+
+
 
 
 // Gestisce la classe active che evidenzia le scelte selezionate cambiando lo stile dell'elemento relativo
@@ -80,7 +117,7 @@ async function callOpenLibraryAPI(_page = "", _limit = "") {
     // Chiamo api ed ottengo i dati
     try {
         const bookData = await api.getBooksListData(textSearch, utility.getTypeSearch(), el_forPage, utility.getNumeroPagina(), "asc");
-   
+
         // creo la listas di libri
         bookList = bookData.docs;
         // ottengo quanti libri ci sono
@@ -90,7 +127,7 @@ async function callOpenLibraryAPI(_page = "", _limit = "") {
         // Gestisco l'errore impostando bookList come un array vuoto
         bookList = [];
     }
-   
+
 
     // creo la sezione dove ci saranno libri
     createSection();
@@ -166,6 +203,7 @@ function createSection() {
 
     const orderSettingsDiv = createSettingsBar();
 
+
     let limitSelect = orderSettingsDiv.querySelector("select");
     limitSelect.value = 12;
     el_forPage = parseInt(limitSelect.value);
@@ -180,7 +218,7 @@ function createSection() {
     document.body.appendChild(section);
 
 
-    orderSettingsDiv.addEventListener("click", function (e) {
+    orderSettingsDiv.addEventListener(clickOrTouch, function (e) {
         bindingEventOrderSetting(e);
     });
 

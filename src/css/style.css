@@ -503,6 +503,7 @@ select {
         "testo_secondario";
     align-items: start;
     padding: 10px;
+
 }
 
 .open .testo .testo-principale {
@@ -511,6 +512,7 @@ select {
 
 .open .testo .testo-secondario {
     grid-area: testo_secondario;
+    width: 80%;
 
 }
 
@@ -536,6 +538,7 @@ select {
 }
 
 .open .titolo {
+    width: 80%;
     font-size: 3rem;
 }
 
@@ -546,7 +549,7 @@ select {
 .open .descrizione {
     font-size: 2vh;
     max-height: 260px;
-    overflow: hidden;
+    overflow: auto;
 }
 
 

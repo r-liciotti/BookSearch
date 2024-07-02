@@ -55,3 +55,10 @@ export function getTypeSearch() {
             return "title=";
     }
 }
+
+// Verifica se il dispositivo supporta il touch
+export function isTouchDevice() {
+    // Controlla se l'evento ontouchstart è presente in windows
+    // significa che il dispositivo ha il touchscreen
+    return 'ontouchstart' in window || navigator.maxTouchPoints;
+}
