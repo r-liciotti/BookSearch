@@ -63,7 +63,6 @@ export async function fetchDescription(key, fullDesc = false) {
     return desc;
 
   } catch (error) {
-    console.error(`--Errore nel fetch della descrizione per l'ID ${key}`, error);
     return 'Descrizione non disponibile'; // Messaggio di fallback
   }
 }
