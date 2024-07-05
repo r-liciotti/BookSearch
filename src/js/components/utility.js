@@ -40,6 +40,19 @@ export function getNumeroPagina() {
     return N_Page === null ? 1 : N_Page;
 }
 
+export function setNumeroPagina(numPagina) {
+    if(!document.body.querySelector(".order-settings")) return;
+    numPagina = parseInt(numPagina);
+   document.body.querySelector('[class="before"]').textContent = numPagina === 1 ? "" : (numPagina - 1).toString();
+
+    // Assegna il valore numPagina all'elemento con la classe .current
+    document.body.querySelector(".current").textContent = numPagina.toString();
+    
+    // Assegna il valore numPagina + 1 all'elemento con la classe .next
+    document.body.querySelector('[class="after"]').textContent = (numPagina + 1).toString();
+
+}
+
 export function formatTextSearch(text) {
     return text.toLowerCase().replace(/\s+/g, '_');
 }

@@ -17,6 +17,7 @@ var el_forPage = 12; // Elementi per pagina
 const containerSearch = document.querySelector(".container-search"); // Pulsante cerca
 
 var textSearch = ""; // Testo da cercare
+var oldtextSearch = "";
 var bookList = null; // vettore che conterrà i risultati
 
 var bookOld; // variabile temporanea per salvare il vecchio stato dell'elemento book, utilizzato quandi si apre in dettaglio un libro
@@ -116,14 +117,21 @@ async function callOpenLibraryAPI(_page = "", _limit = "") {
 
     // Chiamo api ed ottengo i dati
     try {
-        const bookData = await api.getBooksListData(textSearch, utility.getTypeSearch(), el_forPage, utility.getNumeroPagina(), "asc");
+        let numPag = utility.getNumeroPagina();
+        if (oldtextSearch != textSearch) {
+            oldtextSearch = textSearch;
+            numPag = 1;
+            utility.setNumeroPagina(1);
+        }
+        
+        const bookData = await api.getBooksListData(textSearch, utility.getTypeSearch(), el_forPage, numPag, "asc");
 
         // creo la listas di libri
         bookList = bookData.docs;
         // ottengo quanti libri ci sono
         booksMax = parseInt(bookData.numFound);
     } catch (error) {
-        console.error("Errore durante il recupero dei dati:", error);
+        console.log("Errore durante il recupero dei dati:", error);
         // Gestisco l'errore impostando bookList come un array vuoto
         bookList = [];
     }
